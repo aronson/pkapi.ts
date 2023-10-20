@@ -1,0 +1,15 @@
+{
+  "lint": {
+    "include": ["lib/"],
+    "rules": {
+      "tags": ["recommended"]
+    }
+  },
+  "fmt": {
+    "lineWidth": 120,
+    "semiColons": true,
+    "singleQuote": true,
+    "include": ["lib/"]
+  },
+  "lock": false
+}
