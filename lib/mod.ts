@@ -862,7 +862,6 @@ class PKAPI {
     try {
       return await this.#inst(route, request);
     } catch (e: any) {
-      console.log(e);
       throw new APIError(this, e.response);
     }
   }
