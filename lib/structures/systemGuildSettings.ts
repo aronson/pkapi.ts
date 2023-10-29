@@ -35,7 +35,7 @@ export default class SystemGuildSettings implements ISystemGuildSettings {
 
   constructor(api: API, data: Partial<SystemGuildSettings> = {}) {
     this.#api = api;
-    for (var k in data) {
+    for (const k in data) {
       if (KEYS[k]) {
         if (KEYS[k].init) data[k] = KEYS[k].init(data[k]);
         this[k] = data[k];
@@ -44,16 +44,16 @@ export default class SystemGuildSettings implements ISystemGuildSettings {
   }
 
   async patch(token?: string) {
-    var data = await this.#api.patchSystemGuildSettings({ ...this, token });
-    for (var k in data) if (KEYS[k]) this[k] = data[k];
+    const data = await this.#api.patchSystemGuildSettings({ ...this, token });
+    for (const k in data) if (KEYS[k]) this[k] = data[k];
     return this;
   }
 
   async verify() {
-    var settings: Partial<SystemGuildSettings> = {};
-    var errors = [];
-    for (var k in KEYS) {
-      var test = true;
+    const settings: Partial<SystemGuildSettings> = {};
+    const errors = [];
+    for (const k in KEYS) {
+      let test = true;
       if (this[k] == null) {
         settings[k] = this[k];
         continue;

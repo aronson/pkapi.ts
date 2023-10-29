@@ -53,10 +53,10 @@ const KEYS: any = {
     test: async (a: string) => {
       if (!validUrl.isWebUri(a)) return false;
       try {
-        let data = await axios.head(a);
+        const data = await axios.head(a);
         if (data.headers['content-type']?.startsWith('image')) return true;
         return false;
-      } catch (e) {
+      } catch (_) {
         return false;
       }
     },
@@ -67,10 +67,10 @@ const KEYS: any = {
       if (a.length > 256) return false;
       if (!validUrl.isWebUri(a)) return false;
       try {
-        let data = await axios.head(a);
+        const data = await axios.head(a);
         if (data.headers['content-type']?.startsWith('image')) return true;
         return false;
-      } catch (e) {
+      } catch (_) {
         return false;
       }
     },
@@ -139,8 +139,8 @@ export default class Group implements IGroup {
   }
 
   async patch(token?: string) {
-    let data = await this.#api.patchGroup({ group: this.id, ...this, token });
-    for (let k in data) if (KEYS[k]) this[k] = data[k];
+    const data = await this.#api.patchGroup({ group: this.id, ...this, token });
+    for (const k in data) if (KEYS[k]) this[k] = data[k];
     return this;
   }
 
@@ -149,36 +149,36 @@ export default class Group implements IGroup {
   }
 
   async getMembers(token?: string) {
-    let mems = await this.#api.getGroupMembers({ group: this.id, token });
+    const mems = await this.#api.getGroupMembers({ group: this.id, token });
     this.members = mems;
     return mems;
   }
 
   async addMembers(members: Array<string>, token?: string) {
     await this.#api.addGroupMembers({ group: this.id, members, token });
-    let mems = await this.getMembers(token);
+    const mems = await this.getMembers(token);
     this.members = mems;
     return mems;
   }
 
   async removeMembers(members: Array<string>, token?: string) {
     await this.#api.removeGroupMembers({ group: this.id, members, token });
-    let mems = await this.getMembers(token);
+    const mems = await this.getMembers(token);
     this.members = mems;
     return mems;
   }
 
   async setMembers(members: Array<string>, token?: string) {
     await this.#api.setGroupMembers({ group: this.id, members, token });
-    let mems = await this.getMembers(token);
+    const mems = await this.getMembers(token);
     this.members = mems;
     return mems;
   }
 
   async verify() {
-    let group: Partial<Group> = {};
-    let errors = [];
-    for (let k in KEYS) {
+    const group: Partial<Group> = {};
+    const errors = [];
+    for (const k in KEYS) {
       if (KEYS[k].required && !this[k]) {
         errors.push(`Key ${k} is required, but wasn't supplied`);
         continue;

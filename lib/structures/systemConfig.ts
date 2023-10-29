@@ -3,7 +3,7 @@ import API from '../mod.ts';
 import { rawTimeZones } from 'npm:@vvo/tzdb';
 
 function findTz(t: string) {
-  var raw = rawTimeZones.find((z) => {
+  const raw = rawTimeZones.find((z) => {
     return ([
       z.name.toLowerCase(),
       z.abbreviation.toLowerCase(),
@@ -19,7 +19,7 @@ const KEYS: any = {
     test: (t: string) => findTz(t),
     err: 'Timezone must be valid',
     transform: (t: string) => {
-      var raw = findTz(t);
+      const raw = findTz(t);
       return raw!.abbreviation.replace('GMT', 'UTC');
     },
   },
@@ -69,7 +69,7 @@ export default class SystemConfig implements ISystemConfig {
 
   constructor(api: API, data: Partial<SystemConfig> = {}) {
     this.#api = api;
-    for (var k in data) {
+    for (const k in data) {
       if (KEYS[k]) {
         if (KEYS[k].init) data[k] = KEYS[k].init(data[k]);
         this[k] = data[k];
@@ -78,16 +78,16 @@ export default class SystemConfig implements ISystemConfig {
   }
 
   async patch(token?: string) {
-    var data = await this.#api.patchSystemConfig({ ...this, token });
-    for (var k in data) if (KEYS[k]) this[k] = data[k];
+    const data = await this.#api.patchSystemConfig({ ...this, token });
+    for (const k in data) if (KEYS[k]) this[k] = data[k];
     return this;
   }
 
   async verify() {
-    var config: Partial<SystemConfig> = {};
-    var errors = [];
-    for (var k in KEYS) {
-      var test = true;
+    const config: Partial<SystemConfig> = {};
+    const errors = [];
+    for (const k in KEYS) {
+      let test = true;
       if (this[k] == null) {
         config[k] = this[k];
         continue;

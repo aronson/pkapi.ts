@@ -45,7 +45,7 @@ export default class SystemAutoproxySettings implements ISystemAutoproxySettings
 
   constructor(api: API, data: Partial<SystemAutoproxySettings> = {}) {
     this.#api = api;
-    for (var k in data) {
+    for (const k in data) {
       if (KEYS[k]) {
         if (KEYS[k].init) data[k] = KEYS[k].init(data[k]);
         this[k] = data[k];
@@ -54,16 +54,16 @@ export default class SystemAutoproxySettings implements ISystemAutoproxySettings
   }
 
   async patch(token?: string) {
-    var data = await this.#api.patchSystemAutoproxySettings({ ...this, token });
-    for (var k in data) if (KEYS[k]) this[k] = data[k];
+    const data = await this.#api.patchSystemAutoproxySettings({ ...this, token });
+    for (const k in data) if (KEYS[k]) this[k] = data[k];
     return this;
   }
 
   async verify() {
-    var settings: Partial<SystemAutoproxySettings> = {};
-    var errors = [];
-    for (var k in KEYS) {
-      var test = true;
+    const settings: Partial<SystemAutoproxySettings> = {};
+    const errors = [];
+    for (const k in KEYS) {
+      let test = true;
       if (this[k] == null) {
         settings[k] = this[k];
         continue;

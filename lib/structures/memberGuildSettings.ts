@@ -14,7 +14,7 @@ const KEYS: any = {
     test: async (a: string) => {
       if (!validUrl.isWebUri(a)) return false;
       try {
-        let data = await axios.head(a);
+        const data = await axios.head(a);
         if (data.headers['content-type']?.startsWith('image')) return true;
         return false;
       } catch (e) {
@@ -50,7 +50,7 @@ export default class MemberGuildSettings implements IMemberGuildSettings {
 
   constructor(api: API, data: Partial<MemberGuildSettings>) {
     this.#api = api;
-    for (let k in data) {
+    for (const k in data) {
       if (KEYS[k]) {
         if (KEYS[k].init) data[k] = KEYS[k].init(data[k]);
         this[k] = data[k];
@@ -59,15 +59,15 @@ export default class MemberGuildSettings implements IMemberGuildSettings {
   }
 
   async patch(token?: string) {
-    let data = await this.#api.patchMemberGuildSettings({ ...this, token });
-    for (let k in data) if (KEYS[k]) this[k] = data[k];
+    const data = await this.#api.patchMemberGuildSettings({ ...this, token });
+    for (const k in data) if (KEYS[k]) this[k] = data[k];
     return this;
   }
 
   async verify() {
-    let settings: Partial<MemberGuildSettings> = {};
-    let errors = [];
-    for (let k in KEYS) {
+    const settings: Partial<MemberGuildSettings> = {};
+    const errors = [];
+    for (const k in KEYS) {
       let test = true;
       if (this[k] == null) {
         settings[k] = this[k];

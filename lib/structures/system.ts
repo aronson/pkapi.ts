@@ -56,10 +56,10 @@ const KEYS: any = {
     test: async (a: string) => {
       if (!validUrl.isWebUri(a)) return false;
       try {
-        var data = await axios.head(a);
+        const data = await axios.head(a);
         if (data.headers['content-type']?.startsWith('image')) return true;
         return false;
-      } catch (e) {
+      } catch (_) {
         return false;
       }
     },
@@ -69,10 +69,10 @@ const KEYS: any = {
     test: async (a: string) => {
       if (!validUrl.isWebUri(a)) return false;
       try {
-        var data = await axios.head(a);
+        const data = await axios.head(a);
         if (data.headers['content-type']?.startsWith('image')) return true;
         return false;
-      } catch (e) {
+      } catch (_) {
         return false;
       }
     },
@@ -146,7 +146,7 @@ export default class System implements ISystem {
 
   constructor(api: API, data: Partial<System>) {
     this.#api = api;
-    for (var k in data) {
+    for (const k in data) {
       if (KEYS[k]) {
         if (KEYS[k].init) data[k] = KEYS[k].init(data[k]);
         this[k] = data[k];
@@ -155,27 +155,27 @@ export default class System implements ISystem {
   }
 
   async patch(token?: string) {
-    var data = await this.#api.patchSystem({ system: this.id, ...this, token });
-    for (var k in data) if (KEYS[k]) this[k] = data[k];
+    const data = await this.#api.patchSystem({ system: this.id, ...this, token });
+    for (const k in data) if (KEYS[k]) this[k] = data[k];
     return this;
   }
 
   async createMember(data: Partial<Member>) {
-    var mem = await this.#api.createMember(data);
+    const mem = await this.#api.createMember(data);
     if (!this.members) this.members = new Map();
     this.members.set(mem.id, mem);
     return mem;
   }
 
   async getMember(member: string, token?: string) {
-    var mem = await this.#api.getMember({ member, token });
+    const mem = await this.#api.getMember({ member, token });
     if (!this.members) this.members = new Map();
     this.members.set(mem.id, mem);
     return mem;
   }
 
   async getMembers(token?: string) {
-    var mems = await this.#api.getMembers({ system: this.id, token });
+    const mems = await this.#api.getMembers({ system: this.id, token });
     this.members = mems;
     return mems;
   }
@@ -187,20 +187,20 @@ export default class System implements ISystem {
   }
 
   async createGroup(data: Partial<Group>) {
-    var group = await this.#api.createGroup(data);
+    const group = await this.#api.createGroup(data);
     if (!this.groups) this.groups = new Map();
     this.groups.set(group.id, group);
     return group;
   }
 
   async getGroups(token?: string) {
-    var groups = await this.#api.getGroups({ system: this.id, token });
+    const groups = await this.#api.getGroups({ system: this.id, token });
     this.groups = groups;
     return groups;
   }
 
   async getGroup(group: string, token?: string) {
-    var grp = await this.#api.getGroup({ group, token });
+    const grp = await this.#api.getGroup({ group, token });
     if (!this.groups) this.groups = new Map<string, Group>();
     this.groups.set(grp.id, grp);
     return grp;
@@ -212,18 +212,18 @@ export default class System implements ISystem {
     return;
   }
 
-  async createSwitch(data: Partial<Switch>) {
+  createSwitch(data: Partial<Switch>) {
     return this.#api.createSwitch(data);
   }
 
-  async getSwitches(token?: string, raw: boolean = false) {
-    var switches = await this.#api.getSwitches({ system: this.id, token, raw });
+  async getSwitches(token?: string, raw = false) {
+    const switches = await this.#api.getSwitches({ system: this.id, token, raw });
     this.switches = switches;
     return switches;
   }
 
   async getFronters(token?: string) {
-    var fronters = await this.#api.getFronters({ system: this.id, token });
+    const fronters = await this.#api.getFronters({ system: this.id, token });
     this.fronters = fronters;
     return fronters;
   }
@@ -235,30 +235,30 @@ export default class System implements ISystem {
   }
 
   async getConfig(token?: string) {
-    var settings = await this.#api.getSystemConfig({ token });
+    const settings = await this.#api.getSystemConfig({ token });
     this.config = settings;
     return settings;
   }
 
   async getGuildSettings(guild: string, token?: string) {
-    var settings = await this.#api.getSystemGuildSettings({ guild, token });
+    const settings = await this.#api.getSystemGuildSettings({ guild, token });
     if (!this.settings) this.settings = new Map();
     this.settings.set(guild, settings);
     return settings;
   }
 
   async getAutoproxySettings(guild: string, token?: string) {
-    var settings = await this.#api.getSystemAutoproxySettings({ guild, token });
+    const settings = await this.#api.getSystemAutoproxySettings({ guild, token });
     if (!this.autoproxySettings) this.autoproxySettings = new Map();
     this.autoproxySettings.set(guild, settings);
     return settings;
   }
 
   async verify() {
-    var sys: Partial<System> = {};
-    var errors = [];
-    for (var k in KEYS) {
-      var test = true;
+    const sys: Partial<System> = {};
+    const errors = [];
+    for (const k in KEYS) {
+      let test = true;
       if (this[k] == null) {
         sys[k] = this[k];
         continue;

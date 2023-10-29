@@ -215,10 +215,10 @@ export default class Member implements IMember {
 
   #api: API;
 
-  id: string = '';
-  uuid: string = '';
-  system: string = '';
-  name: string = '';
+  id = '';
+  uuid = '';
+  system = '';
+  name = '';
   display_name?: string;
   color?: string;
   birthday?: Date | string;
@@ -250,8 +250,8 @@ export default class Member implements IMember {
   }
 
   async patch(token?: string) {
-    var data = await this.#api.patchMember({ member: this.id, ...this, token });
-    for (var k in data) if (KEYS[k]) this[k] = data[k];
+    const data = await this.#api.patchMember({ member: this.id, ...this, token });
+    for (const k in data) if (KEYS[k]) this[k] = data[k];
     return this;
   }
 
@@ -260,43 +260,43 @@ export default class Member implements IMember {
   }
 
   async getGroups(token?: string) {
-    var groups = await this.#api.getMemberGroups({ member: this.id, token });
+    const groups = await this.#api.getMemberGroups({ member: this.id, token });
     this.groups = groups;
     return groups;
   }
 
   async addGroups(groups: Array<string>, token?: string) {
     await this.#api.addMemberGroups({ member: this.id, groups, token });
-    var grps = await this.getGroups(token);
+    const grps = await this.getGroups(token);
     this.groups = grps;
     return grps;
   }
 
   async removeGroups(groups: Array<string>, token?: string) {
     await this.#api.removeMemberGroups({ member: this.id, groups, token });
-    var grps = await this.getGroups(token);
+    const grps = await this.getGroups(token);
     this.groups = grps;
     return grps;
   }
 
   async setGroups(groups: Array<string>, token?: string) {
     await this.#api.setMemberGroups({ member: this.id, groups, token });
-    var grps = await this.getGroups(token);
+    const grps = await this.getGroups(token);
     this.groups = grps;
     return grps;
   }
 
   async getGuildSettings(guild: string, token?: string) {
-    var settings = await this.#api.getMemberGuildSettings({ member: this.id, guild, token });
+    const settings = await this.#api.getMemberGuildSettings({ member: this.id, guild, token });
     if (!this.settings) this.settings = new Map();
     this.settings.set(guild, settings);
     return settings;
   }
 
   async verify() {
-    var mem: Partial<Member> = {};
-    var errors = [];
-    for (var k in KEYS) {
+    const mem: Partial<Member> = {};
+    const errors = [];
+    for (const k in KEYS) {
       if (KEYS[k].required && !this[k]) {
         errors.push(`Key ${k} is required, but wasn't supplied`);
         continue;
@@ -308,7 +308,7 @@ export default class Member implements IMember {
       }
       if (this[k] == undefined) continue;
 
-      var test = true;
+      let test = true;
       if (KEYS[k].test) test = await KEYS[k].test(this[k]);
       if (!test) {
         errors.push(KEYS[k].err);
